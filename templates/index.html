@@ -1,0 +1,147 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spam Detector App</title>
+<style>
+body {
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+background: linear-gradient(to bottom, #1a237e, #283593);
+color: white;
+margin: 0;
+padding: 0;
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+.header {
+width: 100%;
+background-color: transparent;
+padding: 20px 40px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.header h1 {
+margin: 0;
+font-size: 1.2em;
+font-weight: bold;
+color: #fff;
+}
+.header .nav-links a {
+color: #fff;
+text-decoration: none;
+padding: 8px 15px;
+border-radius: 20px;
+transition: background-color 0.3s, color 0.3s;
+}
+.header .nav-links a:hover {
+background-color: #4CAF50;
+}
+.main-content {
+flex-grow: 1;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+text-align: center;
+padding: 20px;
+max-width: 900px;
+}
+.main-content h2 {
+font-size: 4em;
+font-weight: 800;
+margin-bottom: 0.2em;
+color: #fff;
+}
+.main-content p {
+font-size: 1.2em;
+max-width: 600px;
+line-height: 1.5;
+color: rgba(255, 255, 255, 0.8);
+}
+.btn-play {
+width: 60px;
+height: 60px;
+background-color: #f44336;
+border-radius: 50%;
+display: flex;
+justify-content: center;
+align-items: center;
+cursor: pointer;
+box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
+margin-top: 30px;
+transition: transform 0.2s;
+}
+.btn-play:hover {
+transform: scale(1.05);
+}
+.btn-play svg {
+fill: white;
+width: 25px;
+height: 25px;
+}
+.featured-section {
+margin-top: auto;
+margin-bottom: 20px;
+font-size: 0.9em;
+color: rgba(255, 255, 255, 0.6);
+}
+.user-info {
+font-weight: bold;
+color: #4CAF50;
+}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>Spam Detector</h1>
+<div class="nav-links">
+<a href="{{ url_for('home') }}">Home</a>
+{% if logged_in %}
+<a href="{{ url_for('sms_detection') }}">SMS Detector</a>
+<a href="{{ url_for('email_detection') }}">Email Detector</a>
+<a href="{{ url_for('phishing_detection') }}">Phishing Detector</a>
+<a href="{{ url_for('about') }}">About</a>
+<a href="{{ url_for('logout') }}">Logout</a>
+{% else %}
+<a href="{{ url_for('register') }}">Register</a>
+<a href="{{ url_for('login') }}">Login</a>
+<a href="{{ url_for('about') }}">About</a>
+{% endif %}
+</div>
+</div>
+
+<div class="main-content">
+{% if logged_in %}
+<h2>Welcome Back, <span class="user-info">{{ username }}</span>!</h2>
+<p>Ready to check for spam? Dive into our powerful tools to keep your inbox and messages clean.</p>
+<a href="{{ url_for('sms_detection') }}" class="btn-play">
+<svg viewBox="0 0 24 24">
+<path d="M8 5v14l11-7z"/>
+</svg>
+</a>
+{% else %}
+<h2>The ultimate tool for a spam-free inbox.</h2>
+<p>Our powerful machine learning model accurately identifies and filters out unwanted messages and emails, giving you back control of your digital communication.</p>
+<a href="{{ url_for('register') }}" class="btn-play">
+<svg viewBox="0 0 24 24">
+<path d="M8 5v14l11-7z"/>
+</svg>
+</a>
+{% endif %}
+</div>
+
+<div class="featured-section">
+{% if logged_in %}
+<p>Your journey to a spam-free life starts here.</p>
+{% else %}
+<p>Get started today and see the difference.</p>
+{% endif %}
+</div>
+
+</body>
+</html>

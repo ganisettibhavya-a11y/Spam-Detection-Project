@@ -1,0 +1,198 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Model Accuracy</title>
+<style>
+body {
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+background: linear-gradient(135deg, #1e0030, #2a004b);
+color: #fff;
+margin: 0;
+padding: 0;
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+.header {
+width: 100%;
+background-color: transparent;
+padding: 20px 40px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+color: white;
+z-index: 10;
+}
+.header h1 {
+margin: 0;
+font-size: 1.2em;
+font-weight: bold;
+color: #fff;
+}
+.header .nav-links a {
+color: #fff;
+text-decoration: none;
+padding: 8px 15px;
+border-radius: 20px;
+transition: background-color 0.3s;
+}
+.header .nav-links a:hover {
+background-color: rgba(255, 255, 255, 0.2);
+}
+.main-content {
+flex-grow: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+text-align: center;
+padding: 20px;
+max-width: 900px;
+width: 100%;
+}
+.main-content h2 {
+font-size: 3em;
+font-weight: 800;
+margin-top: 50px;
+margin-bottom: 10px;
+}
+.main-content p.subtitle {
+font-size: 1.2em;
+max-width: 800px;
+line-height: 1.5;
+color: rgba(255, 255, 255, 0.7);
+}
+.card {
+background: #291a45;
+padding: 40px;
+border-radius: 12px;
+box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+text-align: center;
+width: 100%;
+max-width: 800px;
+margin-top: 20px;
+border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.chart-container {
+width: 100%;
+height: 400px;
+margin-top: 20px;
+}
+</style>
+<script src="https://www.google.com/search?q=https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="header">
+<h1>Spam Detector</h1>
+<div class="nav-links">
+<a href="{{ url_for('home') }}">Home</a>
+{% if logged_in %}
+<a href="{{ url_for('sms_detection') }}">SMS Detector</a>
+<a href="{{ url_for('email_detection') }}">Email Detector</a>
+<a href="{{ url_for('phishing_detection') }}">Phishing Detector</a>
+<a href="{{ url_for('about') }}">About</a>
+<a href="{{ url_for('logout') }}">Logout</a>
+{% else %}
+<a href="{{ url_for('register') }}">Register</a>
+<a href="{{ url_for('login') }}">Login</a>
+<a href="{{ url_for('about') }}">About</a>
+{% endif %}
+</div>
+</div>
+
+<div class="main-content">
+    <h2>Model <span style="color: #a846f7;">Accuracy</span> Report</h2>
+    <p class="subtitle">A visual representation of our machine learning models' performance.</p>
+    
+    <div class="card">
+        <div class="chart-container">
+            <canvas id="accuracyChart"></canvas>
+        </div>
+        <p><strong>Note:</strong> Accuracy values are based on the training data used for each model. The values below are dynamically retrieved from the backend.</p>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const accuracies = {
+            'SMS Detector': {{ sms_accuracy | default('0') }},
+            'Email Detector': {{ email_accuracy | default('0') }},
+            'Phishing Detector': {{ phishing_accuracy | default('0') }}
+        };
+
+        const ctx = document.getElementById('accuracyChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(accuracies),
+                datasets: [{
+                    label: 'Accuracy %',
+                    data: Object.values(accuracies),
+                    backgroundColor: [
+                        'rgba(123, 63, 232, 0.7)',
+                        'rgba(168, 70, 247, 0.7)',
+                        'rgba(255, 127, 80, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgb(123, 63, 232)',
+                        'rgb(168, 70, 247)',
+                        'rgb(255, 127, 80)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Accuracy (%)',
+                            color: '#fff'
+                        },
+                        ticks: {
+                            color: '#fff'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.2)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#fff'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.2)'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += context.parsed.y.toFixed(2) + '%';
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register - Spam Detector App</title>
+<style>
+body {
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+background: linear-gradient(to right, #e74c3c, #f39c12, #f1c40f);
+color: #333;
+margin: 0;
+padding: 0;
+display: flex;
+flex-direction: column;
+align-items: center;
+min-height: 100vh;
+}
+.header {
+width: 100%;
+background-color: transparent;
+padding: 20px 40px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+color: white;
+}
+.header h1 {
+margin: 0;
+font-size: 1.2em;
+font-weight: bold;
+color: #fff;
+}
+.header .nav-links a {
+color: #fff;
+text-decoration: none;
+padding: 8px 15px;
+border-radius: 20px;
+transition: background-color 0.3s;
+}
+.header .nav-links a:hover {
+background-color: rgba(255, 255, 255, 0.2);
+}
+.container {
+width: 90%;
+max-width: 500px;
+background-color: rgba(255, 255, 255, 0.9);
+padding: 40px;
+margin-top: 50px;
+box-shadow: 0 0 20px rgba(0,0,0,0.2);
+border-radius: 12px;
+text-align: center;
+}
+.container h2 {
+font-size: 2em;
+margin-bottom: 20px;
+color: #1a237e;
+}
+.form-group {
+margin-bottom: 20px;
+text-align: left;
+}
+.form-group label {
+display: block;
+margin-bottom: 8px;
+font-weight: bold;
+color: #1a237e;
+}
+.form-group input {
+width: 100%;
+padding: 12px;
+box-sizing: border-box;
+border: 1px solid #ccc;
+border-radius: 8px;
+font-size: 1em;
+background-color: #f9f9f9;
+}
+.btn {
+background-color: #1a237e;
+color: white;
+padding: 15px 30px;
+border: none;
+border-radius: 50px;
+cursor: pointer;
+transition: background-color 0.3s, transform 0.2s;
+font-size: 1em;
+font-weight: bold;
+}
+.btn:hover {
+background-color: #283593;
+transform: translateY(-2px);
+}
+.error {
+color: #d32f2f;
+margin-bottom: 15px;
+font-weight: bold;
+}
+</style>
+</head>
+<body>
+<div class="header">
+<h1>Spam Detector</h1>
+<div class="nav-links">
+<a href="{{ url_for('home') }}">Home</a>
+{% if logged_in %}
+<a href="{{ url_for('sms_detection') }}">SMS Detector</a>
+<a href="{{ url_for('email_detection') }}">Email Detector</a>
+<a href="{{ url_for('about') }}">About</a>
+<a href="{{ url_for('logout') }}">Logout</a>
+{% else %}
+<a href="{{ url_for('register') }}">Register</a>
+<a href="{{ url_for('login') }}">Login</a>
+<a href="{{ url_for('about') }}">About</a>
+{% endif %}
+</div>
+</div>
+
+<div class="container">
+    <h2>Register</h2>
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+    <form method="POST">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div class="form-group">
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+        </div>
+        <button type="submit" class="btn">Register</button>
+    </form>
+</div>
+
+</body>
+</html>
